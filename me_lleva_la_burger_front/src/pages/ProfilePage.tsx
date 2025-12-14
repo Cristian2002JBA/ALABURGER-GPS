@@ -6,7 +6,7 @@ import { authService } from '../services/authService';
 import Swal from 'sweetalert2';
 
 export const ProfilePage = () => {
-    const { user, login } = useAuth(); // Usamos login para actualizar el contexto si es necesario, o recargamos
+    const { user } = useAuth(); // Usamos login para actualizar el contexto si es necesario, o recargamos
     const [formData, setFormData] = useState({
         nombre_cliente: '',
         apellido_cliente: '',
@@ -43,7 +43,18 @@ export const ProfilePage = () => {
             // El ID puede estar en user.id o user.id_cliente dependiendo de la respuesta del backend
             const userId = user.id || user.id_cliente;
 
-            const updatedUser = await authService.updateProfile(userId, formData);
+            if (!userId) {
+                console.error('User ID not found');
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error de identificación de usuario',
+                    icon: 'error'
+                });
+                setIsLoading(false);
+                return;
+            }
+
+            await authService.updateProfile(userId, formData);
 
             // Actualizar el estado global o forzar recarga
             // Una forma rápida es recargar para que el Header coja el nuevo localStorage

@@ -54,9 +54,9 @@ export const AddToCart = () => {
             <div className="glass-card rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row w-full animate-fade-in border border-white/10 backdrop-blur-md">
               <div className="md:w-1/2 h-80 md:h-auto bg-gray-900/50 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
-                {product.imagen ? (
+                {product.imagen || product.foto ? (
                   <img
-                    src={product.imagen}
+                    src={product.imagen || product.foto}
                     alt={product.nombre_producto}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />

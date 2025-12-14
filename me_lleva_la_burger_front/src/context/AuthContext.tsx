@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface User {
   id: number;
+  id_cliente?: number;
   email: string;
   role: string; // 'gerente', 'encargado', 'empleado', 'cajero'
   cargo?: string;
@@ -10,6 +11,7 @@ interface User {
   nombre_cliente?: string;
   apellido_cliente?: string;
   correo_cliente?: string;
+  telefono_cliente?: string;
 }
 
 interface AuthContextType {

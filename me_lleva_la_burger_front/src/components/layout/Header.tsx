@@ -76,7 +76,10 @@ export const Header = () => {
       <div className="flex items-center gap-6 relative">
         {/* Carrito */}
         <button
-          onClick={() => setShowCartMenu(!showCartMenu)}
+          onClick={() => {
+            setShowCartMenu(!showCartMenu);
+            setShowUserMenu(false);
+          }}
           className="flex items-center gap-2 text-white hover:text-[#FFC72C] bg-transparent border-0 cursor-pointer transition-colors relative group"
         >
           <div className="p-2 rounded-full group-hover:bg-white/10 transition-colors">
@@ -93,7 +96,10 @@ export const Header = () => {
 
         {/* Usuario */}
         <button
-          onClick={() => setShowUserMenu(!showUserMenu)}
+          onClick={() => {
+            setShowUserMenu(!showUserMenu);
+            setShowCartMenu(false);
+          }}
           className="flex items-center gap-3 text-white bg-transparent border-0 cursor-pointer group"
         >
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFC72C] to-[#DA291C] p-[2px]">
@@ -160,7 +166,7 @@ export const Header = () => {
 
       {/* Cart Menu Dropdown */}
       {showCartMenu && (
-        <div className="glass-card rounded-2xl p-6 shadow-2xl w-96 max-h-[500px] overflow-y-auto absolute top-24 right-4 md:right-24 z-50 flex flex-col animate-fade-in border border-white/10 bg-black/90">
+        <div className="glass-card rounded-2xl p-6 shadow-2xl w-96 max-h-[500px] overflow-y-auto absolute top-24 right-4 md:right-24 z-50 flex flex-col animate-fade-in border border-white/10 bg-black/80">
           <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
             <h3 className="font-bold text-xl text-white font-oswald tracking-wide">MI PEDIDO</h3>
             <span className="bg-[#FFC72C] text-black text-xs font-bold px-2 py-1 rounded-md">{items.length} ITEMS</span>
@@ -171,7 +177,11 @@ export const Header = () => {
               items.map((item) => (
                 <div key={item.id} className="flex gap-4 items-center bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors group">
                   <div className="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center p-1">
-                    {item.producto?.imagen ? <img src={item.producto.imagen} alt="" className="w-full h-full object-contain" /> : <div className="w-4 h-4 bg-[#FFC72C] rounded-full"></div>}
+                    {item.producto?.imagen || item.producto?.foto ? (
+                      <img src={item.producto.imagen || item.producto.foto} alt="" className="w-full h-full object-contain" />
+                    ) : (
+                      <div className="w-4 h-4 bg-[#FFC72C] rounded-full"></div>
+                    )}
                   </div>
                   <div className="flex-grow">
                     <p className="font-bold text-white leading-tight">{item.producto?.nombre_producto || 'Producto'}</p>
