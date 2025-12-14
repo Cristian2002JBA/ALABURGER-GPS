@@ -63,4 +63,18 @@ export const authService = {
   isAuthenticated: (): boolean => {
     return !!localStorage.getItem('token');
   },
+
+  updateProfile: async (id: string | number, data: any): Promise<any> => {
+    const response = await api.patch(`/customer/${id}`, data);
+
+    // Si la actualización fue exitosa, actualizar el usuario en localStorage
+    if (response.data) {
+      // Fusionar los datos actuales con los nuevos
+      const currentUser = authService.getCurrentUser();
+      const updatedUser = { ...currentUser, ...response.data };
+      localStorage.setItem('clienteActual', JSON.stringify(updatedUser));
+      return updatedUser;
+    }
+    return response.data;
+  }
 };

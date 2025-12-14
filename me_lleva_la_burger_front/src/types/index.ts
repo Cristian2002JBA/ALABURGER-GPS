@@ -15,10 +15,12 @@ export interface Product {
 
 export interface Customer {
   id: number;
+  id_cliente?: number; // Backend compatibility
   nombre_cliente: string;
   apellido_cliente: string;
   correo_cliente: string;
   telefono?: string;
+  telefono_cliente?: string;
   email?: string;
   rol_cliente?: string;
   nombre?: string;

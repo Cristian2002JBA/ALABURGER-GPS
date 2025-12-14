@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import { LocationPage } from './pages/LocationPage';
 import { ContactPage } from './pages/ContactPage';
 import RegisterPage from './pages/RegisterPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { Dashboard } from './pages/admin/Dashboard';
 import MenuAdmin from './pages/admin/AdminMenuPage';
 import { PedidosAdmin } from './pages/admin/Pedidos';
@@ -22,6 +23,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/carts/add/:productId" element={<AddToCart />} />
         <Route path="/ubicacion" element={<LocationPage />} />
         <Route path="/ubicacion" element={<LocationPage />} />
