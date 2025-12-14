@@ -18,7 +18,7 @@ export const ContactPage = () => {
                     <div className="grid md:grid-cols-3 gap-8">
                         {/* WhatsApp */}
                         <a
-                            href="https://wa.me/524431234567"
+                            href="https://wa.me/527151444904"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="glass-card p-8 rounded-3xl hover:border-[#25D366] transition-all duration-300 transform hover:-translate-y-2 group no-underline flex flex-col items-center"
@@ -50,7 +50,7 @@ export const ContactPage = () => {
 
                         {/* Email */}
                         <a
-                            href="mailto:contacto@mellevalaburger.com"
+                            href="mailto:burger@gmail.com"
                             className="glass-card p-8 rounded-3xl hover:border-[#EA4335] transition-all duration-300 transform hover:-translate-y-2 group no-underline flex flex-col items-center"
                         >
                             <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform bg-[#EA4335]/20 group-hover:bg-[#EA4335]/30">

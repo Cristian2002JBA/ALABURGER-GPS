@@ -16,10 +16,10 @@ export const LocationPage = () => {
                         <div className="grid md:grid-cols-2 gap-10 mb-8">
                             <div className="text-white flex flex-col justify-center">
                                 <h2 className="text-3xl font-bold text-[#DA291C] mb-4 font-oswald">Visítanos</h2>
-                                <p className="text-xl mb-2 font-light">Morelia, Michoacán</p>
+                                <p className="text-xl mb-2 font-light">Salida Charo, Morelia</p>
                                 <p className="text-gray-400 mb-8 leading-relaxed">
                                     ¡Ven a probar las mejores hamburguesas de la ciudad!
-                                    Estamos ubicados en el corazón de Morelia.
+                                    Estamos ubicados en Periférico Paseo de la República S/N.
                                 </p>
 
                                 <h3 className="text-2xl font-bold text-[#FFC72C] mb-4 font-oswald">Horario</h3>
@@ -41,7 +41,7 @@ export const LocationPage = () => {
 
                             <div className="h-80 md:h-auto bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-white/10">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60087.37666424526!2d-101.24707766875002!3d19.702423200000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842d0ba2d2985609%3A0x714d722a2b07202!2sCatedral%20de%20Morelia!5e0!3m2!1sen!2smx!4v1700000000000!5m2!1sen!2smx"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3756.294191319766!2d-101.1718330249791!3d19.700049981636174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842d0e40be8f4c7b%3A0x633519d8021a81c!2sKFC%20Morelia%20Charo!5e0!3m2!1sen!2smx!4v1715631234567!5m2!1sen!2smx"
                                     width="100%"
                                     height="100%"
                                     style={{ border: 0 }}
