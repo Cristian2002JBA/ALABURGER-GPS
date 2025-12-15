@@ -25,9 +25,10 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     service = new AuthService(
-      mockRepository as any,
-      mockRepository as any,
+      mockRepository as any, // customer
+      mockRepository as any, // employee
       mockJwtService as any,
+      { log: jest.fn() } as any, // mockLogger
     );
     customerRepo = mockRepository;
   });
@@ -39,9 +40,7 @@ describe('AuthService', () => {
   describe('loginCustomer', () => {
     it('should return token and user when credentials are valid', async () => {
       jest.spyOn(customerRepo, 'findOne').mockResolvedValue(mockCustomer);
-      jest
-        .spyOn(bcrypt, 'compare')
-        .mockImplementation(() => Promise.resolve(true));
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true as never);
 
       const result = await service.loginCustomer({
         correo_cliente: 'test@example.com',

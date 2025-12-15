@@ -5,6 +5,8 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Customer } from './entities/customer.entity';
 import { Repository } from 'typeorm';
 
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+
 describe('CustomerService', () => {
   let service: CustomerService;
   let repository: Repository<Customer>;
@@ -39,6 +41,10 @@ describe('CustomerService', () => {
 
           useValue: mockRepository,
         },
+        {
+          provide: WINSTON_MODULE_PROVIDER,
+          useValue: { log: jest.fn() },
+        },
       ],
     }).compile();
 
@@ -66,7 +72,7 @@ describe('CustomerService', () => {
         apellido_cliente: 'User',
         correo_cliente: 'test@example.com',
         contrasena_cliente: 'password',
-        direccion: 'Address',
+        direccion: 'Test Address',
         telefono_cliente: '1234567890',
         estado_cliente: 'ACTIVO',
       };
