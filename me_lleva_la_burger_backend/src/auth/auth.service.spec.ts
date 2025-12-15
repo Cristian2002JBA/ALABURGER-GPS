@@ -37,7 +37,6 @@ describe('AuthService', () => {
   });
 
   describe('loginCustomer', () => {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     it('should return token and user when credentials are valid', async () => {
       jest.spyOn(customerRepo, 'findOne').mockResolvedValue(mockCustomer);
       jest
