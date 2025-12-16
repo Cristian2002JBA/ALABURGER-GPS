@@ -1,44 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from '../context/AuthContext';
-import { orderService } from '../services/orderService';
+import { useOrders } from '../hooks/useOrders';
 import { Layout } from '../components/layout/Layout';
-import type { Order } from '../types';
 
 export const OrdersPage = () => {
-    const { isAuthenticated, isLoading: authLoading } = useAuth(); // Rename to avoid conflict if needed, or just use isLoading
+    const { isAuthenticated, isLoading: authLoading } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation(); // Import from react-router-dom
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const location = useLocation();
+
+    // Use TanStack Query hook
+    const { orders: rawOrders, isLoading: ordersLoading, deleteOrder } = useOrders();
 
     useEffect(() => {
-        if (authLoading) return; // Wait for auth check
+        if (authLoading) return;
 
         if (!isAuthenticated) {
             navigate('/login', { state: { from: location } });
-            return;
         }
-        loadOrders();
-    }, [isAuthenticated, authLoading]);
+    }, [isAuthenticated, authLoading, navigate, location]);
 
-    const loadOrders = async () => {
-        try {
-            const data = await orderService.getMyOrders();
-            // Filter out cancelled orders and sort by date descending
-            const activeOrders = data.filter(order => order.estado !== 'Cancelado');
-            setOrders(activeOrders.sort((a, b) => {
-                const dateA = a.fecha_pedido ? new Date(a.fecha_pedido).getTime() : 0;
-                const dateB = b.fecha_pedido ? new Date(b.fecha_pedido).getTime() : 0;
-                return dateB - dateA;
-            }));
-        } catch (error) {
-            console.error('Error loading orders:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const orders = useMemo(() => {
+        if (!rawOrders) return [];
+        // Filter out cancelled orders and sort by date descending
+        const activeOrders = rawOrders.filter(order => order.estado !== 'Cancelado');
+        return activeOrders.sort((a, b) => {
+            const dateA = a.fecha_pedido ? new Date(a.fecha_pedido).getTime() : 0;
+            const dateB = b.fecha_pedido ? new Date(b.fecha_pedido).getTime() : 0;
+            return dateB - dateA;
+        });
+    }, [rawOrders]);
 
     const handleCancelOrder = async (orderId: number) => {
         const result = await Swal.fire({
@@ -56,7 +48,7 @@ export const OrdersPage = () => {
 
         if (result.isConfirmed) {
             try {
-                await orderService.deleteOrder(orderId);
+                await deleteOrder(orderId);
 
                 await Swal.fire({
                     title: '¡Cancelado!',
@@ -67,7 +59,7 @@ export const OrdersPage = () => {
                     color: '#fff'
                 });
 
-                loadOrders(); // Refresh list
+                // No need to reload, TanStack Query handles invalidation
             } catch (error) {
                 Swal.fire({
                     title: 'Error',
@@ -91,7 +83,7 @@ export const OrdersPage = () => {
         }
     };
 
-    if (isLoading) {
+    if (authLoading || (isAuthenticated && ordersLoading)) {
         return (
             <Layout>
                 <div className="min-h-screen bg-[#111] flex items-center justify-center">
