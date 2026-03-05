@@ -1,58 +1,55 @@
 ```mermaid
-C4Component
-  title Arquitectura Integral MLLB (Contexto, Contenedores y Componentes)
+flowchart TB
+    %% Usuarios
+    cliente(("👤 Cliente"))
+    admin(("🛠️ Administrador"))
+    empleado(("👨‍🍳 Empleado"))
 
-  %% 1. Actores y Sistemas Externos (Contexto)
-  Person(cliente, "Cliente", "Hace pedidos, ve el menú y estado.")
-  Person(admin, "Administrador", "Gestiona menú, stock y empleados.")
-  Person(empleado, "Empleado", "Actualiza estado de pedidos asignados.")
+    %% Sistemas Externos
+    oauth[/"🌐 Google / GitHub (OAuth)"/]
+    sentry[/"🐛 Sentry (Monitoreo de Errores)"/]
 
-  System_Ext(oauth, "Google / GitHub (OAuth)", "Proveedor de inicio de sesión.")
-  System_Ext(sentry, "Sentry", "Plataforma de monitoreo de errores.")
+    %% El Sistema Principal
+    subgraph MLLB ["🖥️ Plataforma Me Lleva La Burger"]
+        
+        spa["💻 Frontend Web (SPA)\nReact, Vite, Tailwind"]
+        db[("🗄️ Base de Datos\nPostgreSQL")]
 
-  %% 2. El Sistema y sus Contenedores Principales
-  System_Boundary(mllb, "Plataforma Me Lleva La Burger") {
-    
-    Container(spa, "Frontend Web (SPA)", "React 19, Vite, Tailwind", "Interfaz de usuario en el navegador.")
-    ContainerDb(db, "Base de Datos", "PostgreSQL", "Almacenamiento (Usuarios, Pedidos, Menú).")
+        subgraph Backend ["⚙️ Backend API REST (NestJS)"]
+            auth["🔐 AuthModule"]
+            customer["👤 CustomerModule"]
+            employee["👷 EmployeeModule"]
+            product["🍔 ProductModule"]
+            cart["🛒 CartModule"]
+            order["📦 OrderModule"]
+            payment["💳 PaymentModule"]
+        end
+    end
 
-    %% 3. Los Componentes Internos del Backend (NestJS)
-    Container_Boundary(api, "Backend API REST (NestJS)") {
-      Component(auth, "AuthModule", "Passport, JWT, OAuth", "Autenticación")
-      Component(customer, "CustomerModule", "NestJS", "Perfiles de clientes")
-      Component(employee, "EmployeeModule", "NestJS", "Gestión de personal")
-      Component(product, "ProductModule", "NestJS", "Catálogo de hamburguesas")
-      Component(cart, "CartModule", "NestJS", "Carrito temporal")
-      Component(order, "OrderModule", "NestJS", "Gestión y estados del pedido")
-      Component(payment, "PaymentModule", "NestJS", "Procesamiento de cobros")
-    }
-  }
+    %% Relaciones de Usuarios a Frontend
+    cliente -->|Consulta menú y pedidos| spa
+    admin -->|Gestiona menú y staff| spa
+    empleado -->|Actualiza estado| spa
 
-  %% Relaciones de Usuarios a Frontend
-  Rel(cliente, spa, "Usa la plataforma", "HTTPS")
-  Rel(admin, spa, "Administra", "HTTPS")
-  Rel(empleado, spa, "Trabaja", "HTTPS")
-  
-  %% Relaciones a Sistemas Externos
-  Rel(spa, oauth, "Redirige para login", "HTTPS")
-  Rel(api, oauth, "Valida sesión OAuth", "HTTPS")
-  Rel(spa, sentry, "Envía errores UI", "HTTPS")
+    %% Relaciones de Frontend a Módulos del Backend
+    spa -->|Login/Registro| auth
+    spa -->|Ve Menú| product
+    spa -->|Agrega productos| cart
+    spa -->|Finaliza cobro| order
 
-  %% Relaciones de Frontend a Módulos del Backend
-  Rel(spa, auth, "/auth/* (Login/Registro)", "JSON/HTTPS")
-  Rel(spa, product, "/products (Muestra Menú)", "JSON/HTTPS")
-  Rel(spa, cart, "/cart (Agrega al carrito)", "JSON/HTTPS")
-  Rel(spa, order, "/orders (Finaliza el pedido)", "JSON/HTTPS")
+    %% Relaciones Internas del Backend
+    cart -.->|Consulta precio/stock| product
+    order -.->|Convierte carrito| cart
+    order -.->|Inicia cobro| payment
 
-  %% Relaciones Internas del Backend
-  Rel(cart, product, "Consulta disponibilidad/precios", "Llamada interna")
-  Rel(order, cart, "Convierte carrito en orden firme", "Llamada interna")
-  Rel(order, payment, "Inicia cobro", "Llamada interna")
+    %% Relaciones a Sistemas Externos
+    spa -.->|Redirige para login| oauth
+    Backend -.->|Valida sesión| oauth
+    spa -.->|Reporta errores UI| sentry
 
-  %% Relaciones a Base de Datos
-  Rel(customer, db, "Lee/Escribe", "TypeORM/TCP")
-  Rel(employee, db, "Lee/Escribe", "TypeORM/TCP")
-  Rel(product, db, "Lee/Escribe", "TypeORM/TCP")
-  Rel(order, db, "Lee/Escribe", "TypeORM/TCP")
-
+    %% Relaciones a Base de Datos
+    customer ==>|Lee/Escribe| db
+    employee ==>|Lee/Escribe| db
+    product ==>|Lee/Escribe| db
+    order ==>|Lee/Escribe| db
 ```
